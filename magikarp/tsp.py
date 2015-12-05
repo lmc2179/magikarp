@@ -1,5 +1,8 @@
-import math
 import itertools
+import math
+
+from magikarp.abstract import AbstractExhaustiveSolver
+
 
 class TravellingSalespersonProblem(object):
     def __init__(self, points):
@@ -16,23 +19,15 @@ class TravellingSalespersonProblem(object):
         circuit_point_pairs = [(self.points[i1], self.points[i2]) for i1, i2 in circuit_index_pairs]
         return sum([self._distance(p1, p2) for p1, p2 in circuit_point_pairs])
 
-class ExhaustiveTSPSolver(object):
-    def solve(self, problem):
-        potential_solutions = self._get_potential_solutions(problem)
-        best = self._get_best_solution(potential_solutions, problem)
-        return best
 
+class ExhaustiveTSPSolver(AbstractExhaustiveSolver):
     def _get_potential_solutions(self, problem):
         index_size = len(problem.get_points())
         all_indices = list(range(index_size))
         return itertools.permutations(all_indices)
 
-    def _get_best_solution(self, potential_solutions, problem):
-        shortest_so_far = float('inf')
-        best_so_far = None
-        for sol in potential_solutions:
-            solution_cost = problem.evaluate_solution(sol)
-            if solution_cost < shortest_so_far:
-                shortest_so_far = solution_cost
-                best_so_far = sol
-        return best_so_far
+    def _candidate_solution_is_better(self, candidate_solution_value, best_solution_value):
+        return candidate_solution_value < best_solution_value
+
+    def _get_worst_possible_solution_value(self):
+        return float('inf')
