@@ -1,10 +1,10 @@
 import itertools
 import math
 
-from magikarp.abstract import AbstractExhaustiveSolver
+from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem
 
 
-class TravellingSalespersonProblem(object):
+class TravellingSalespersonProblem(AbstractProblem):
     def __init__(self, points):
         self.points = points
 

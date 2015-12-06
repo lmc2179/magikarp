@@ -26,3 +26,7 @@ class AbstractExhaustiveSolver(AbstractSolver):
 
     def _candidate_solution_is_better(self, candidate_solution_value, best_solution_value):
         raise NotImplementedError
+
+class AbstractProblem(object):
+    def evaluate_solution(self, solution):
+        raise NotImplementedError

@@ -1,7 +1,7 @@
 import itertools
-from magikarp.abstract import AbstractExhaustiveSolver, AbstractSolver
+from magikarp.abstract import AbstractExhaustiveSolver, AbstractSolver, AbstractProblem
 
-class KnapsackProblem(object):
+class KnapsackProblem(AbstractProblem):
     "Represents an instance of the 0-1 knapsack problem. Solutions are the indices of the objects chosen."
     def __init__(self, weights, values, limit):
         self.weights = weights
