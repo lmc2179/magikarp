@@ -1,4 +1,8 @@
-class AbstractExhaustiveSolver(object):
+class AbstractSolver(object):
+    def solve(self, problem):
+        raise NotImplementedError
+
+class AbstractExhaustiveSolver(AbstractSolver):
     def solve(self, problem):
         potential_solutions = self._get_potential_solutions(problem)
         best = self._get_best_solution(potential_solutions, problem)

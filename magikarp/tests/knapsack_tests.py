@@ -19,5 +19,20 @@ class ExhaustiveKnapsackTest(unittest.TestCase):
         solution = knapsack.ExhaustiveKnapsackSolver().solve(p)
         self.assertEqual({0, 2}, set(solution))
 
+class GreedyKnapsackTest(unittest.TestCase):
+    def test_optimal_solution_evalution(self):
+        p = knapsack.KnapsackProblem(weights=[1,2,4],
+                                     values=[2, 4, 8],
+                                     limit=5)
+        solution = knapsack.GreedyKnapsackSolver().solve(p)
+        self.assertEqual({0, 2}, set(solution))
+
+    def test_suboptimal_solution_evalution(self):
+        p = knapsack.KnapsackProblem(weights=[2,3,5],
+                                     values=[2, 3, 5],
+                                     limit=5)
+        solution = knapsack.GreedyKnapsackSolver().solve(p)
+        self.assertEqual({2}, set(solution))
+
 if __name__ == '__main__':
     unittest.main()
