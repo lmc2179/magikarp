@@ -1,5 +1,6 @@
-import random
 import math
+import random
+
 
 class AbstractSimulatedAnnealing(object):
     def __init__(self, cooling_constant):
@@ -33,20 +34,3 @@ class AbstractSimulatedAnnealing(object):
 
     def _evaluate_point(self, p):
         raise NotImplementedError # This is the function to minimize
-
-class ArraySearchSimulatedAnnealing(AbstractSimulatedAnnealing):
-    """This is a simple subclass use to test the abstract implementation above. It
-    performs a search through a very large array for a minimum value."""
-    def __init__(self, cooling_constant, target_array):
-        super(ArraySearchSimulatedAnnealing, self).__init__(cooling_constant=cooling_constant)
-        self.target_array = target_array
-
-    def _get_neighbor(self, current_point):
-        if random.random() > 0.5:
-            offset = 1
-        else:
-            offset = -1
-        return (current_point + offset) % len(self.target_array)
-
-    def _evaluate_point(self, p):
-        return self.target_array[p]
