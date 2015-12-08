@@ -1,14 +1,11 @@
 import random
-
-from magikarp import simulated_annealing
 import unittest
-
 from magikarp.simulated_annealing import AbstractSimulatedAnnealing
 
 
 class SimulatedAnnealingTest(unittest.TestCase):
     def test_array_search(self):
-        sa = magikarp.tests.simulated_annealing_test.ArraySearchSimulatedAnnealing(1.0, [0, 1, 0, -1, 0, 1, -2, 0])
+        sa = ArraySearchSimulatedAnnealing(1.0, [0, 1, 0, -1, 0, 1, -2, 0])
         solution = sa.get_approximate_solution(0, 20)
         self.assertEqual(solution, 6)
 
