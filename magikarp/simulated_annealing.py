@@ -7,6 +7,8 @@ class AbstractSimulatedAnnealing(object):
         self.cooling_constant = cooling_constant
 
     def get_approximate_solution(self, initial_point, no_iterations):
+        best_score = float('inf')
+        best_point = None
         current_point = initial_point
         for i in range(no_iterations):
             temp = self._get_temperature(i)
@@ -14,7 +16,11 @@ class AbstractSimulatedAnnealing(object):
             acceptance_prob = self._get_acceptance_likelihood(current_point, candidate_point, temp)
             if acceptance_prob > random.random():
                 current_point = candidate_point
-        return current_point
+                current_score = self._evaluate_point(current_point)
+                if current_score < best_score:
+                    best_score = current_score
+                    best_point = current_point
+        return best_point
 
     def _get_temperature(self, iteration):
         if iteration + 1 == 1:
