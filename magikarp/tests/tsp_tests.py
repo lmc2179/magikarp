@@ -28,6 +28,5 @@ class ExhaustiveTSPSolverTest(unittest.TestCase):
         self.assertEqual(l1_canonical, l2_canonical)
 
     def _get_canonical_cyclic_form(self, l):
-        l = list(l)
-        new_zero = argmin(l)
-        return l[new_zero:] + l[:new_zero]
+        edges = [(p1, p2) for p1, p2 in zip(l[:-1], l[1:])] + [(l[-1], l[0])]
+        return sorted([sorted(e) for e in edges])

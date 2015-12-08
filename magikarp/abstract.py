@@ -16,7 +16,7 @@ class AbstractExhaustiveSolver(AbstractSolver):
         best_solution = None
         for sol in potential_solutions:
             candidate_solution_value = problem.evaluate_solution(sol)
-            if self._candidate_solution_is_better(candidate_solution_value, best_solution_value):
+            if problem.better_score(candidate_solution_value, best_solution_value):
                 best_solution_value = candidate_solution_value
                 best_solution = sol
         return best_solution
@@ -29,4 +29,13 @@ class AbstractExhaustiveSolver(AbstractSolver):
 
 class AbstractProblem(object):
     def evaluate_solution(self, solution):
+        raise NotImplementedError
+
+    def better(self, sol1, sol2):
+        "Return True if the first solution is better than (or equal to) the second."
+        return self.better_score(self.evaluate_solution(sol1),
+                                 self.evaluate_solution(sol2))
+
+    def better_score(self, score1, score2):
+        "Return True if the first score is better than (or equal to) the second."
         raise NotImplementedError

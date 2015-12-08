@@ -15,10 +15,10 @@ class PartitionProblem(AbstractProblem):
     def get_array(self):
         return self.array
 
-class ExhaustivePartitionSolver(AbstractExhaustiveSolver):
-    def _candidate_solution_is_better(self, candidate_solution_value, best_solution_value):
-        return  candidate_solution_value < best_solution_value
+    def better_score(self, score1, score2):
+        return score1 < score2
 
+class ExhaustivePartitionSolver(AbstractExhaustiveSolver):
     def _get_potential_solutions(self, problem):
         index_list = range(len(problem.get_array()))
         index_set = set(index_list)

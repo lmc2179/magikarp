@@ -33,15 +33,15 @@ class KnapsackProblem(AbstractProblem):
     def get_number_items(self):
         return len(self.weights)
 
+    def better_score(self, score1, score2):
+        return score1 > score2
+
 class ExhaustiveKnapsackSolver(AbstractExhaustiveSolver):
     def _get_potential_solutions(self, problem):
         return self._get_power_set(range(problem.get_number_items()))
 
     def _get_power_set(self, items):
         return itertools.chain.from_iterable(itertools.combinations(items, r) for r in range(len(items)+1))
-
-    def _candidate_solution_is_better(self, candidate_solution_value, best_solution_value):
-        return candidate_solution_value > best_solution_value
 
     def _get_worst_possible_solution_value(self):
         return -float('inf')
