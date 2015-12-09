@@ -37,8 +37,8 @@ class KnapsackProblem(AbstractProblem):
         return score1 > score2
 
 class ExhaustiveKnapsackSolver(AbstractExhaustiveSolver):
-    def _get_potential_solutions(self, problem):
-        return self._get_power_set(range(problem.get_number_items()))
+    def _get_potential_solutions(self):
+        return self._get_power_set(range(self.problem.get_number_items()))
 
     def _get_power_set(self, items):
         return itertools.chain.from_iterable(itertools.combinations(items, r) for r in range(len(items)+1))
@@ -47,26 +47,26 @@ class ExhaustiveKnapsackSolver(AbstractExhaustiveSolver):
         return -float('inf')
 
 class GreedyKnapsackSolver(AbstractSolver):
-    def solve(self, problem):
-        sorted_indices = self._get_sorted_indices(problem)
-        selected_indices = self._select_indices(sorted_indices, problem)
+    def solve(self):
+        sorted_indices = self._get_sorted_indices()
+        selected_indices = self._select_indices(sorted_indices)
         return selected_indices
 
-    def _get_sorted_indices(self, problem):
-        decorated_indices = [self._decorate_with_value_ratio(i, problem)
-                             for i in range(problem.get_number_items())]
+    def _get_sorted_indices(self):
+        decorated_indices = [self._decorate_with_value_ratio(i)
+                             for i in range(self.problem.get_number_items())]
         sorted_decorated_indices = sorted(decorated_indices, reverse=True)
         return [index for value_ratio, index in sorted_decorated_indices]
 
-    def _decorate_with_value_ratio(self, i, problem):
-        value_ratio = 1.0 * problem.get_value(i) / problem.get_weight(i)
+    def _decorate_with_value_ratio(self, i):
+        value_ratio = 1.0 * self.problem.get_value(i) / self.problem.get_weight(i)
         return (value_ratio, i)
 
-    def _select_indices(self, sorted_indices, problem):
+    def _select_indices(self, sorted_indices):
         total_weight = 0
         selected_indices = []
         for index in sorted_indices:
-            if total_weight + problem.get_weight(index) <= problem.get_limit():
-                total_weight += problem.get_weight(index)
+            if total_weight + self.problem.get_weight(index) <= self.problem.get_limit():
+                total_weight += self.problem.get_weight(index)
                 selected_indices.append(index)
         return selected_indices

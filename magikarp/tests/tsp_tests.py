@@ -19,7 +19,7 @@ class ExhaustiveTSPSolverTest(unittest.TestCase):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
         p = TravellingSalespersonProblem(points)
-        solution = ExhaustiveTSPSolver().solve(p)
+        solution = ExhaustiveTSPSolver(p).solve()
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])
 
     def _assert_cyclic_equals(self, l1, l2):

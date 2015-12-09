@@ -1,22 +1,29 @@
 class AbstractSolver(object):
-    def solve(self, problem):
+    def __init__(self, problem):
+        """
+        The problem instance is part of the solver's immutable state.
+        The solver should allow for as little mutable state as possible.
+        """
+        self.problem = problem
+
+    def solve(self, *args, **kwargs):
         raise NotImplementedError
 
 class AbstractExhaustiveSolver(AbstractSolver):
-    def solve(self, problem):
-        potential_solutions = self._get_potential_solutions(problem)
-        best = self._get_best_solution(potential_solutions, problem)
+    def solve(self):
+        potential_solutions = self._get_potential_solutions()
+        best = self._get_best_solution(potential_solutions)
         return best
 
-    def _get_potential_solutions(self, problem):
+    def _get_potential_solutions(self):
         raise NotImplementedError
 
-    def _get_best_solution(self, potential_solutions, problem):
+    def _get_best_solution(self, potential_solutions):
         best_solution_value = self._get_worst_possible_solution_value()
         best_solution = None
         for sol in potential_solutions:
-            candidate_solution_value = problem.evaluate_solution(sol)
-            if problem.better_score(candidate_solution_value, best_solution_value):
+            candidate_solution_value = self.problem.evaluate_solution(sol)
+            if self.problem.better_score(candidate_solution_value, best_solution_value):
                 best_solution_value = candidate_solution_value
                 best_solution = sol
         return best_solution

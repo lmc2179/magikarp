@@ -25,8 +25,8 @@ class TravellingSalespersonProblem(AbstractProblem):
         return score1 <= score2
 
 class ExhaustiveTSPSolver(AbstractExhaustiveSolver):
-    def _get_potential_solutions(self, problem):
-        index_size = len(problem.get_points())
+    def _get_potential_solutions(self):
+        index_size = len(self.problem.get_points())
         all_indices = list(range(index_size))
         return itertools.permutations(all_indices)
 

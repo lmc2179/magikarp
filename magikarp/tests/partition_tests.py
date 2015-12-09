@@ -11,7 +11,7 @@ class PartitionProblemTest(unittest.TestCase):
 class ExhaustiveSolverTest(unittest.TestCase):
     def test_optimal_solution(self):
         p = partition.PartitionProblem([1, -1, 2])
-        sol = partition.ExhaustivePartitionSolver().solve(p)
+        sol = partition.ExhaustivePartitionSolver(p).solve()
         p1, p2 = sol
         self.assertNotEqual(p1, p2)
         best_partitioning = [{0}, {1, 2}]

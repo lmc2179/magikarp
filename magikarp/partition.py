@@ -19,8 +19,8 @@ class PartitionProblem(AbstractProblem):
         return score1 < score2
 
 class ExhaustivePartitionSolver(AbstractExhaustiveSolver):
-    def _get_potential_solutions(self, problem):
-        index_list = range(len(problem.get_array()))
+    def _get_potential_solutions(self):
+        index_list = range(len(self.problem.get_array()))
         index_set = set(index_list)
         for first_partition_size in range(1, int(len(index_set) / 2) + 1):
             for first_partition in itertools.combinations(index_list, first_partition_size):

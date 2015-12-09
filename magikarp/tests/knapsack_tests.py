@@ -16,7 +16,7 @@ class ExhaustiveKnapsackTest(unittest.TestCase):
         p = knapsack.KnapsackProblem(weights=[1,2,4],
                                      values=[2, 4, 8],
                                      limit=5)
-        solution = knapsack.ExhaustiveKnapsackSolver().solve(p)
+        solution = knapsack.ExhaustiveKnapsackSolver(p).solve()
         self.assertEqual({0, 2}, set(solution))
 
 class GreedyKnapsackTest(unittest.TestCase):
@@ -24,14 +24,14 @@ class GreedyKnapsackTest(unittest.TestCase):
         p = knapsack.KnapsackProblem(weights=[1,2,4],
                                      values=[2, 4, 8],
                                      limit=5)
-        solution = knapsack.GreedyKnapsackSolver().solve(p)
+        solution = knapsack.GreedyKnapsackSolver(p).solve()
         self.assertEqual({0, 2}, set(solution))
 
     def test_suboptimal_solution_evalution(self):
         p = knapsack.KnapsackProblem(weights=[2,3,5],
                                      values=[2, 3, 5],
                                      limit=5)
-        solution = knapsack.GreedyKnapsackSolver().solve(p)
+        solution = knapsack.GreedyKnapsackSolver(p).solve()
         self.assertEqual({2}, set(solution))
 
 if __name__ == '__main__':
