@@ -1,5 +1,10 @@
 import itertools
+import random
+from copy import  deepcopy
+
 from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum
+from magikarp.simulated_annealing import AbstractSimulatedAnnealingSolver
+
 
 class PartitionProblem(AbstractProblem):
     "Represents an instance of the partition difference optimization problem."
@@ -31,3 +36,24 @@ class ExhaustivePartitionSolver(AbstractExhaustiveSolver):
 
     def _get_worst_possible_solution_value(self):
         return float('inf')
+
+class SimulatedAnnealingPartitionSolver(AbstractSimulatedAnnealingSolver):
+    def _get_neighbor(self, current_point):
+        left_partition, right_partition = deepcopy(current_point)
+        if not left_partition:
+            source, target = right_partition, left_partition
+        elif not right_partition:
+            source, target = left_partition, right_partition
+        else:
+            if random.random() > 0.5:
+                source, target = left_partition, right_partition
+            else:
+                source, target = right_partition, left_partition
+        source, target = self._move_element(source, target)
+        return source, target
+
+    def _move_element(self, source, target):
+        i = random.randint(0, len(source) - 1)
+        element = source.pop(i)
+        target.append(element)
+        return source, target

@@ -1,8 +1,8 @@
 import itertools
 import math
-import random
+
 from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem, MinMaxEnum
-from magikarp.simulated_annealing import AbstractSimulatedAnnealing
+
 
 class TravellingSalespersonProblem(AbstractProblem):
     MIN_MAX_TYPE = MinMaxEnum.MIN

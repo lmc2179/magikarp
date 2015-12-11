@@ -4,9 +4,9 @@ import random
 from magikarp.abstract import AbstractSolver, MinMaxEnum
 
 
-class AbstractSimulatedAnnealing(AbstractSolver):
+class AbstractSimulatedAnnealingSolver(AbstractSolver):
     def __init__(self, problem):
-        super(AbstractSimulatedAnnealing, self).__init__(problem)
+        super(AbstractSimulatedAnnealingSolver, self).__init__(problem)
         self.EVALUATION_COEFF = self._get_evaluation_coeff()
 
     def _get_evaluation_coeff(self):
@@ -14,7 +14,7 @@ class AbstractSimulatedAnnealing(AbstractSolver):
         if MIN_MAX_TYPE == MinMaxEnum.MIN:
             return 1.0 # No adjustment needed here, this is already a minimization problem
         elif MIN_MAX_TYPE == MinMaxEnum.MAX:
-            return 1.0
+            return -1.0
         raise Exception('Unrecognized MIN_MAX_TYPE for class {0}: {1}'.format(self.problem.__class__,
                                                                               self.problem.MIN_MAX_TYPE))
 
