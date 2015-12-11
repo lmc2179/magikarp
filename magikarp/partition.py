@@ -1,10 +1,12 @@
 import itertools
-from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver
+from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum
 
 class PartitionProblem(AbstractProblem):
     "Represents an instance of the partition difference optimization problem."
+    MIN_MAX_TYPE = MinMaxEnum.MIN
     def __init__(self, array):
         self.array = array
+        super(PartitionProblem, self).__init__()
 
     def evaluate_solution(self, solution):
         p1_indices, p2_indices = solution

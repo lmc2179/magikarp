@@ -1,12 +1,14 @@
 import itertools
-from magikarp.abstract import AbstractExhaustiveSolver, AbstractSolver, AbstractProblem
+from magikarp.abstract import AbstractExhaustiveSolver, AbstractSolver, AbstractProblem, MinMaxEnum
 
 class KnapsackProblem(AbstractProblem):
     "Represents an instance of the 0-1 knapsack problem. Solutions are the indices of the objects chosen."
+    MIN_MAX_TYPE = MinMaxEnum.MAX
     def __init__(self, weights, values, limit):
         self.weights = weights
         self.values = values
         self.limit = limit
+        super(KnapsackProblem, self).__init__()
 
     def evaluate_solution(self, item_indices):
         total_weight = sum([self.weights[i] for i in item_indices])

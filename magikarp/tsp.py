@@ -1,12 +1,14 @@
 import itertools
 import math
 import random
-from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem
+from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem, MinMaxEnum
 from magikarp.simulated_annealing import AbstractSimulatedAnnealing
 
 class TravellingSalespersonProblem(AbstractProblem):
+    MIN_MAX_TYPE = MinMaxEnum.MIN
     def __init__(self, points):
         self.points = points
+        super(TravellingSalespersonProblem, self).__init__()
 
     def get_points(self):
         return self.points

@@ -35,6 +35,11 @@ class AbstractExhaustiveSolver(AbstractSolver):
         raise NotImplementedError
 
 class AbstractProblem(object):
+    MIN_MAX_TYPE = None
+    def __init__(self):
+        if self.MIN_MAX_TYPE is None:
+            raise Exception('All problem classes must have a MIN_MAX_TYPE')
+
     def evaluate_solution(self, solution):
         raise NotImplementedError
 
@@ -46,3 +51,7 @@ class AbstractProblem(object):
     def better_score(self, score1, score2):
         "Return True if the first score is better than (or equal to) the second."
         raise NotImplementedError
+
+class MinMaxEnum(object):
+    MAX = 1
+    MIN = -1
