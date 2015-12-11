@@ -27,8 +27,9 @@ class TravellingSalespersonProblem(AbstractProblem):
 class ExhaustiveTSPSolver(AbstractExhaustiveSolver):
     def _get_potential_solutions(self):
         index_size = len(self.problem.get_points())
-        all_indices = list(range(index_size))
-        return itertools.permutations(all_indices)
+        all_indices = list(range(1, index_size))
+        for tail_permutation in itertools.permutations(all_indices):
+            yield [0] + list(tail_permutation)
 
     def _candidate_solution_is_better(self, candidate_solution_value, best_solution_value):
         return candidate_solution_value < best_solution_value
