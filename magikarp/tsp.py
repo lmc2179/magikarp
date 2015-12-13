@@ -46,7 +46,7 @@ class SimulatedAnnealingTSPSolver(AbstractSimulatedAnnealingSolver):
     def _get_neighbor(self, current_point):
         next_point = copy.deepcopy(current_point)
         max_index = len(next_point) - 1
-        i1 = random.randint(0, max_index)
-        i2 = random.randint(0, max_index)
+        i1 = random.randint(1, max_index)
+        i2 = random.randint(1, max_index)
         next_point[i1], next_point[i2] = next_point[i2], next_point[i1]
         return next_point
