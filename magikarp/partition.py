@@ -2,7 +2,7 @@ import itertools
 import random
 from copy import  deepcopy
 
-from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum
+from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum, AbstractSolver
 from magikarp.simulated_annealing import AbstractSimulatedAnnealingSolver
 
 
@@ -36,6 +36,21 @@ class ExhaustivePartitionSolver(AbstractExhaustiveSolver):
 
     def _get_worst_possible_solution_value(self):
         return float('inf')
+
+class GreedyPartitionSolver(AbstractSolver):
+    def solve(self):
+        array_values_and_indices = [(v, i) for i, v in enumerate(self.problem.get_array())]
+        sorted_values = sorted(array_values_and_indices, reverse=True)
+        p1, p2 = [], []
+        p1_sum, p2_sum = 0, 0
+        for v, i in sorted_values:
+            if p1_sum <= p2_sum:
+                p1.append(i)
+                p1_sum += v
+            else:
+                p2.append(i)
+                p2_sum += v
+        return p1, p2
 
 class SimulatedAnnealingPartitionSolver(AbstractSimulatedAnnealingSolver):
     def _get_neighbor(self, current_point):
