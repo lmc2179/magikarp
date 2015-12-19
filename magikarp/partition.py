@@ -3,7 +3,7 @@ import random
 from copy import  deepcopy
 
 from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum, AbstractSolver
-from magikarp.simulated_annealing import AbstractSimulatedAnnealingSolver
+from magikarp.simulated_annealing import AbstractNeighborStrategy
 
 
 class PartitionProblem(AbstractProblem):
@@ -52,8 +52,8 @@ class GreedyPartitionSolver(AbstractSolver):
                 p2_sum += v
         return p1, p2
 
-class SimulatedAnnealingPartitionSolver(AbstractSimulatedAnnealingSolver):
-    def _get_neighbor(self, current_point):
+class PartitionNeighborStrategy(AbstractNeighborStrategy):
+    def get_neighbor(self, current_point):
         left_partition, right_partition = deepcopy(current_point)
         if not left_partition:
             source, target = right_partition, left_partition

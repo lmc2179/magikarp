@@ -1,6 +1,7 @@
 import unittest
 
 from magikarp import partition
+from magikarp.simulated_annealing import SimulatedAnnealingSolver
 
 
 class PartitionProblemTest(unittest.TestCase):
@@ -23,7 +24,7 @@ class ExhaustiveSolverTest(unittest.TestCase):
 class SimulatedAnnealingSolverTest(unittest.TestCase):
     def test_optimal_solution(self):
         p = partition.PartitionProblem([1, -1, 2])
-        sol = partition.SimulatedAnnealingPartitionSolver(p).solve([[0, 1, 2], []], 100, 5.0)
+        sol = SimulatedAnnealingSolver(p, partition.PartitionNeighborStrategy()).solve([[0, 1, 2], []], 100, 5.0)
         p1, p2 = sol
         self.assertNotEqual(p1, p2)
         best_partitioning = [{0}, {1, 2}]

@@ -1,7 +1,8 @@
 import math
 import unittest
 
-from magikarp.tsp import TravellingSalespersonProblem, ExhaustiveTSPSolver, SimulatedAnnealingTSPSolver
+from magikarp.simulated_annealing import SimulatedAnnealingSolver
+from magikarp.tsp import TravellingSalespersonProblem, ExhaustiveTSPSolver, TSP2OptNeighborStrategy
 
 
 class MetricTSProblemTest(unittest.TestCase):
@@ -37,5 +38,5 @@ class SimulatedAnnealingTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
         p = TravellingSalespersonProblem(points)
-        solution = SimulatedAnnealingTSPSolver(p).solve([0, 1, 2, 3], 100, 10)
+        solution = SimulatedAnnealingSolver(p, TSP2OptNeighborStrategy()).solve([0, 1, 2, 3], 100, 10)
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])

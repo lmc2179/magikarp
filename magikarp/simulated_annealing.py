@@ -4,10 +4,11 @@ import random
 from magikarp.abstract import AbstractSolver, MinMaxEnum
 
 
-class AbstractSimulatedAnnealingSolver(AbstractSolver):
-    def __init__(self, problem):
-        super(AbstractSimulatedAnnealingSolver, self).__init__(problem)
+class SimulatedAnnealingSolver(AbstractSolver):
+    def __init__(self, problem, neighbor_strategy):
+        super(SimulatedAnnealingSolver, self).__init__(problem)
         self.EVALUATION_COEFF = self._get_evaluation_coeff()
+        self.strategy = neighbor_strategy
 
     def _get_evaluation_coeff(self):
         MIN_MAX_TYPE = self.problem.MIN_MAX_TYPE
@@ -24,7 +25,7 @@ class AbstractSimulatedAnnealingSolver(AbstractSolver):
         current_point = initial_point
         for i in range(no_iterations): #TODO: Uncle bob this
             temp = self._get_temperature(i, cooling_constant)
-            candidate_point = self._get_neighbor(current_point)
+            candidate_point = self.strategy.get_neighbor(current_point)
             acceptance_prob = self._get_acceptance_likelihood(current_point, candidate_point, temp)
             if acceptance_prob > random.random():
                 current_point = candidate_point
@@ -39,9 +40,6 @@ class AbstractSimulatedAnnealingSolver(AbstractSolver):
             return cooling_constant
         return cooling_constant / math.log(iteration+1)
 
-    def _get_neighbor(self, current_point):
-        raise NotImplementedError
-
     def _get_acceptance_likelihood(self, current_point, candidate_point, temp):
         current_value = self._evaluate_point(current_point)
         candidate_value = self._evaluate_point(candidate_point)
@@ -52,3 +50,10 @@ class AbstractSimulatedAnnealingSolver(AbstractSolver):
 
     def _evaluate_point(self, p):
         return self.EVALUATION_COEFF * self.problem.evaluate_solution(p)
+
+class AbstractNeighborStrategy(object):
+    def get_neighbors(self, current_point):
+        raise NotImplementedError
+
+    def get_neighbor(self, current_point):
+        raise NotImplementedError

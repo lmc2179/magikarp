@@ -4,7 +4,7 @@ import math
 import random
 
 from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem, MinMaxEnum
-from magikarp.simulated_annealing import AbstractSimulatedAnnealingSolver
+from magikarp.simulated_annealing import AbstractNeighborStrategy
 
 
 class TravellingSalespersonProblem(AbstractProblem):
@@ -42,8 +42,8 @@ class ExhaustiveTSPSolver(AbstractExhaustiveSolver):
     def _get_worst_possible_solution_value(self):
         return float('inf')
 #
-class SimulatedAnnealingTSPSolver(AbstractSimulatedAnnealingSolver):
-    def _get_neighbor(self, current_point):
+class TSP2OptNeighborStrategy(AbstractNeighborStrategy):
+    def get_neighbor(self, current_point):
         next_point = copy.deepcopy(current_point)
         max_index = len(next_point) - 1
         i1, i2 = 1, 1
