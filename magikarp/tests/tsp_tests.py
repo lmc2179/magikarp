@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from magikarp.simulated_annealing import SimulatedAnnealingSolver
+from magikarp.point_search import SimulatedAnnealingSolver, HillClimbingSolver
 from magikarp.tsp import TravellingSalespersonProblem, ExhaustiveTSPSolver, TSP2OptNeighborStrategy
 
 
@@ -39,4 +39,11 @@ class SimulatedAnnealingTSPSolverTest(AbstractTSPSolverTest):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
         p = TravellingSalespersonProblem(points)
         solution = SimulatedAnnealingSolver(p, TSP2OptNeighborStrategy()).solve([0, 1, 2, 3], 100, 10)
+        self._assert_cyclic_equals(solution, [0, 1, 2, 3])
+
+class HillClimbingTSPSolverTest(AbstractTSPSolverTest):
+    def test_square(self):
+        points = [(0, 0), (1, 0), (1, 1), (0, 1)]
+        p = TravellingSalespersonProblem(points)
+        solution = HillClimbingSolver(p, TSP2OptNeighborStrategy()).solve([0, 2, 1, 3], 100)
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])

@@ -4,7 +4,7 @@ import math
 import random
 
 from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem, MinMaxEnum
-from magikarp.simulated_annealing import AbstractNeighborStrategy
+from magikarp.point_search import AbstractNeighborStrategy
 
 
 class TravellingSalespersonProblem(AbstractProblem):
@@ -54,3 +54,13 @@ class TSP2OptNeighborStrategy(AbstractNeighborStrategy):
             i2 = random.randint(1, max_index)
         next_point[i1], next_point[i2] = next_point[i2], next_point[i1]
         return next_point
+
+    def get_neighbors(self, current_point):
+        tour_swap_indices = itertools.combinations(range(1, len(current_point)), 2)
+        tour_permutations = [self._apply_swap(current_point, i, j) for i, j in tour_swap_indices]
+        return [list(tour) for tour in tour_permutations]
+
+    def _apply_swap(self, city, i, j):
+        new_city = copy.deepcopy(city)
+        new_city[i], new_city[j] = new_city[j], new_city[i]
+        return new_city

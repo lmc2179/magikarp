@@ -1,12 +1,16 @@
 import math
 import random
 
+import numpy as np
+
 from magikarp.abstract import AbstractSolver, MinMaxEnum
 
 
-class SimulatedAnnealingSolver(AbstractSolver):
+class PointSearchSolver(AbstractSolver):
+    # Contains logic for using the MIN_MAX_TYPE to frame problems as a function minimization over some search space.
+    # This will probably get renamed or moved higher up the chain when I write subset search methods.
     def __init__(self, problem, neighbor_strategy):
-        super(SimulatedAnnealingSolver, self).__init__(problem)
+        super(PointSearchSolver, self).__init__(problem)
         self.EVALUATION_COEFF = self._get_evaluation_coeff()
         self.strategy = neighbor_strategy
 
@@ -18,7 +22,10 @@ class SimulatedAnnealingSolver(AbstractSolver):
             return -1.0
         raise Exception('Unrecognized MIN_MAX_TYPE for class {0}: {1}'.format(self.problem.__class__,
                                                                               self.problem.MIN_MAX_TYPE))
+    def _evaluate_point(self, p):
+        return self.EVALUATION_COEFF * self.problem.evaluate_solution(p)
 
+class SimulatedAnnealingSolver(PointSearchSolver):
     def solve(self, initial_point, no_iterations, cooling_constant):
         best_score = float('inf')
         best_point = None
@@ -48,12 +55,24 @@ class SimulatedAnnealingSolver(AbstractSolver):
         else:
             return math.exp(-(candidate_value - current_value) / temp)
 
-    def _evaluate_point(self, p):
-        return self.EVALUATION_COEFF * self.problem.evaluate_solution(p)
-
 class AbstractNeighborStrategy(object):
     def get_neighbors(self, current_point):
         raise NotImplementedError
 
     def get_neighbor(self, current_point):
         raise NotImplementedError
+
+class HillClimbingSolver(PointSearchSolver):
+    def solve(self, initial_point, no_iterations):
+        current_score = self._evaluate_point(initial_point)
+        current_point = initial_point
+        for i in range(no_iterations): #TODO: Uncle bob this too
+            neighbors = self.strategy.get_neighbors(current_point)
+            scores = [self._evaluate_point(n) for n in neighbors]
+            best_score_index = np.argmin(scores)
+            if scores[best_score_index] > current_score:
+                return neighbors[best_score_index]
+            else:
+                current_point = neighbors[best_score_index]
+                current_score = scores[best_score_index]
+        return current_point

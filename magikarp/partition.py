@@ -3,7 +3,7 @@ import random
 from copy import  deepcopy
 
 from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum, AbstractSolver
-from magikarp.simulated_annealing import AbstractNeighborStrategy
+from magikarp.point_search import AbstractNeighborStrategy
 
 
 class PartitionProblem(AbstractProblem):

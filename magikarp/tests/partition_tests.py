@@ -1,7 +1,7 @@
 import unittest
 
 from magikarp import partition
-from magikarp.simulated_annealing import SimulatedAnnealingSolver
+from magikarp.point_search import SimulatedAnnealingSolver
 
 
 class PartitionProblemTest(unittest.TestCase):
