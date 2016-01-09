@@ -1,8 +1,8 @@
 import math
 import unittest
 
-from magikarp.point_search import SimulatedAnnealingSolver, HillClimbingSolver
-from magikarp.tsp import TravellingSalespersonProblem, ExhaustiveTSPSolver, TSP2OptNeighborStrategy
+from magikarp.tsp import TravellingSalespersonProblem, \
+    solve_tsp_simulated_annealing, solve_tsp_exhaustive, solve_tsp_hill_climbing
 
 
 class MetricTSProblemTest(unittest.TestCase):
@@ -30,20 +30,17 @@ class AbstractTSPSolverTest(unittest.TestCase):
 class ExhaustiveTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-        p = TravellingSalespersonProblem(points)
-        solution = ExhaustiveTSPSolver(p).solve()
+        solution = solve_tsp_exhaustive(points)
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])
 
 class SimulatedAnnealingTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-        p = TravellingSalespersonProblem(points)
-        solution = SimulatedAnnealingSolver(p, TSP2OptNeighborStrategy()).solve([0, 1, 2, 3], 100, 10)
+        solution = solve_tsp_simulated_annealing(points, [0, 1, 2, 3], 100, 10, '2-opt')
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])
 
 class HillClimbingTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-        p = TravellingSalespersonProblem(points)
-        solution = HillClimbingSolver(p, TSP2OptNeighborStrategy()).solve([0, 2, 1, 3], 100)
+        solution = solve_tsp_hill_climbing(points, [0, 2, 1, 3], 100, '2-opt')
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])

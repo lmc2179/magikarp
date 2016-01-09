@@ -4,7 +4,7 @@ import math
 import random
 
 from magikarp.abstract import AbstractExhaustiveSolver, AbstractProblem, MinMaxEnum
-from magikarp.point_search import AbstractNeighborStrategy
+from magikarp.point_search import AbstractNeighborStrategy, SimulatedAnnealingSolver, HillClimbingSolver
 
 
 class TravellingSalespersonProblem(AbstractProblem):
@@ -64,3 +64,27 @@ class TSP2OptNeighborStrategy(AbstractNeighborStrategy):
         new_city = copy.deepcopy(city)
         new_city[i], new_city[j] = new_city[j], new_city[i]
         return new_city
+
+NEIGHBOR_STRATEGIES = {'2-opt': TSP2OptNeighborStrategy}
+
+def get_neighbor_strategy(name):
+    if name not in NEIGHBOR_STRATEGIES:
+        raise Exception('Invalid neighbor type - should be one of {0}'.format(NEIGHBOR_STRATEGIES.keys()))
+    return NEIGHBOR_STRATEGIES[name]()
+
+def solve_tsp_exhaustive(points):
+    p = TravellingSalespersonProblem(points)
+    solution = ExhaustiveTSPSolver(p).solve()
+    return solution
+
+def solve_tsp_simulated_annealing(points, initial_configuration, no_iterations, cooling_constant, neighborhood_type):
+    p = TravellingSalespersonProblem(points)
+    ns = get_neighbor_strategy(neighborhood_type)
+    solution = SimulatedAnnealingSolver(p, ns).solve(initial_configuration, no_iterations, cooling_constant)
+    return solution
+
+def solve_tsp_hill_climbing(points, initial_configuration, no_iterations, neighborhood_type):
+    p = TravellingSalespersonProblem(points)
+    ns = get_neighbor_strategy(neighborhood_type)
+    solution = HillClimbingSolver(p, ns).solve(initial_configuration, no_iterations)
+    return solution
