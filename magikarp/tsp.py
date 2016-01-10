@@ -75,16 +75,16 @@ def get_neighbor_strategy(name):
 def solve_tsp_exhaustive(points):
     p = TravellingSalespersonProblem(points)
     solution = ExhaustiveTSPSolver(p).solve()
-    return solution
+    return solution, p.evaluate_solution(solution)
 
 def solve_tsp_simulated_annealing(points, initial_configuration, no_iterations, cooling_constant, neighborhood_type):
     p = TravellingSalespersonProblem(points)
     ns = get_neighbor_strategy(neighborhood_type)
     solution = SimulatedAnnealingSolver(p, ns).solve(initial_configuration, no_iterations, cooling_constant)
-    return solution
+    return solution, p.evaluate_solution(solution)
 
 def solve_tsp_hill_climbing(points, initial_configuration, no_iterations, neighborhood_type):
     p = TravellingSalespersonProblem(points)
     ns = get_neighbor_strategy(neighborhood_type)
     solution = HillClimbingSolver(p, ns).solve(initial_configuration, no_iterations)
-    return solution
+    return solution, p.evaluate_solution(solution)

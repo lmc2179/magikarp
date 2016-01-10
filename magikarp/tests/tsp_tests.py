@@ -30,17 +30,17 @@ class AbstractTSPSolverTest(unittest.TestCase):
 class ExhaustiveTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-        solution = solve_tsp_exhaustive(points)
+        solution, cost = solve_tsp_exhaustive(points)
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])
 
 class SimulatedAnnealingTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-        solution = solve_tsp_simulated_annealing(points, [0, 1, 2, 3], 100, 10, '2-opt')
+        solution, cost = solve_tsp_simulated_annealing(points, [0, 1, 2, 3], 100, 10, '2-opt')
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])
 
 class HillClimbingTSPSolverTest(AbstractTSPSolverTest):
     def test_square(self):
         points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-        solution = solve_tsp_hill_climbing(points, [0, 2, 1, 3], 100, '2-opt')
+        solution, cost = solve_tsp_hill_climbing(points, [0, 2, 1, 3], 100, '2-opt')
         self._assert_cyclic_equals(solution, [0, 1, 2, 3])
