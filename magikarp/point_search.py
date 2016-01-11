@@ -30,8 +30,8 @@ class SimulatedAnnealingSolver(PointSearchSolver):
         best_score = float('inf')
         best_point = None
         current_point = initial_point
+        temp = cooling_constant
         for i in range(no_iterations): #TODO: Uncle bob this
-            temp = self._get_temperature(i, cooling_constant)
             candidate_point = self.strategy.get_neighbor(current_point)
             acceptance_prob = self._get_acceptance_likelihood(current_point, candidate_point, temp)
             if acceptance_prob > random.random():
@@ -40,12 +40,11 @@ class SimulatedAnnealingSolver(PointSearchSolver):
                 if current_score < best_score:
                     best_score = current_score
                     best_point = current_point
+            temp = self._get_temperature(i, cooling_constant, candidate_point, current_point)
         return best_point
 
-    def _get_temperature(self, iteration, cooling_constant):
-        if iteration == 0:
-            return cooling_constant
-        return cooling_constant / math.log(iteration+1)
+    def _get_temperature(self, iteration, cooling_constant, candidate_point, current_point):
+        return cooling_constant / math.log(iteration+2)
 
     def _get_acceptance_likelihood(self, current_point, candidate_point, temp):
         current_value = self._evaluate_point(current_point)
