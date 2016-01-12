@@ -67,24 +67,33 @@ class TSP2OptNeighborStrategy(AbstractNeighborStrategy):
 
 NEIGHBOR_STRATEGIES = {'2-opt': TSP2OptNeighborStrategy}
 
-def get_neighbor_strategy(name):
+def _get_neighbor_strategy(name):
     if name not in NEIGHBOR_STRATEGIES:
         raise Exception('Invalid neighbor type - should be one of {0}'.format(NEIGHBOR_STRATEGIES.keys()))
     return NEIGHBOR_STRATEGIES[name]()
+
+def _get_random_initial_configuration(p):
+    cfg = range(len(p.get_points()))
+    random.shuffle(cfg)
+    return cfg
 
 def solve_tsp_exhaustive(points):
     p = TravellingSalespersonProblem(points)
     solution = ExhaustiveTSPSolver(p).solve()
     return solution, p.evaluate_solution(solution)
 
-def solve_tsp_simulated_annealing(points, initial_configuration, no_iterations, cooling_constant, neighborhood_type):
+def solve_tsp_simulated_annealing(points, no_iterations, cooling_constant, initial_configuration = None):
     p = TravellingSalespersonProblem(points)
-    ns = get_neighbor_strategy(neighborhood_type)
+    if not initial_configuration:
+        initial_configuration = _get_random_initial_configuration(p)
+    ns = _get_neighbor_strategy('2-opt') # This is hard-coded for now, until we have more neighborhood types
     solution = SimulatedAnnealingSolver(p, ns).solve(initial_configuration, no_iterations, cooling_constant)
     return solution, p.evaluate_solution(solution)
 
-def solve_tsp_hill_climbing(points, initial_configuration, no_iterations, neighborhood_type):
+def solve_tsp_hill_climbing(points, no_iterations, initial_configuration = None):
     p = TravellingSalespersonProblem(points)
-    ns = get_neighbor_strategy(neighborhood_type)
+    if not initial_configuration:
+        initial_configuration = _get_random_initial_configuration(p)
+    ns = _get_neighbor_strategy('2-opt') # This is hard-coded for now, until we have more neighborhood types
     solution = HillClimbingSolver(p, ns).solve(initial_configuration, no_iterations)
     return solution, p.evaluate_solution(solution)

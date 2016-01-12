@@ -26,9 +26,9 @@ def generate_cc_data(no_trials, no_cities, lower_bound, upper_bound, sa_iteratio
     for i in tqdm(range(no_trials)):
         random.shuffle(initial_config)
         t = random.random()*T_RANGE + lower_bound
-        solution,cost = solve_tsp_simulated_annealing(random_cities, initial_config, sa_iterations, t, '2-opt')
+        solution,cost = solve_tsp_simulated_annealing(random_cities, sa_iterations, t, initial_configuration=initial_config)
         results.append((t, cost))
-        _, new_baseline_cost = solve_tsp_hill_climbing(random_cities, initial_config, sa_iterations, '2-opt')
+        _, new_baseline_cost = solve_tsp_hill_climbing(random_cities, sa_iterations, initial_configuration=initial_config)
         baseline_cost = min(new_baseline_cost, baseline_cost)
 
     print('Baseline cost: ', baseline_cost)

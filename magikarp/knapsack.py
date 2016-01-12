@@ -1,5 +1,7 @@
 import itertools
+
 from magikarp.abstract import AbstractExhaustiveSolver, AbstractSolver, AbstractProblem, MinMaxEnum
+
 
 class KnapsackProblem(AbstractProblem):
     "Represents an instance of the 0-1 knapsack problem. Solutions are the indices of the objects chosen."
@@ -72,3 +74,13 @@ class GreedyKnapsackSolver(AbstractSolver):
                 total_weight += self.problem.get_weight(index)
                 selected_indices.append(index)
         return selected_indices
+
+def solve_knapsack_exhaustive(weights, values, weight_limit):
+        p = KnapsackProblem(weights, values, weight_limit)
+        solution = ExhaustiveKnapsackSolver(p).solve()
+        return solution
+
+def solve_knapsack_greedy(weights, values, weight_limit):
+        p = KnapsackProblem(weights, values, weight_limit)
+        solution = GreedyKnapsackSolver(p).solve()
+        return solution

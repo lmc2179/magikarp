@@ -3,24 +3,24 @@ import random
 from copy import  deepcopy
 
 from magikarp.abstract import AbstractProblem, AbstractExhaustiveSolver, MinMaxEnum, AbstractSolver
-from magikarp.point_search import AbstractNeighborStrategy
+from magikarp.point_search import AbstractNeighborStrategy, SimulatedAnnealingSolver
 
 
 class PartitionProblem(AbstractProblem):
     "Represents an instance of the partition difference optimization problem."
     MIN_MAX_TYPE = MinMaxEnum.MIN
-    def __init__(self, array):
-        self.array = array
+    def __init__(self, input_list):
+        self.input_list = input_list
         super(PartitionProblem, self).__init__()
 
     def evaluate_solution(self, solution):
         p1_indices, p2_indices = solution
-        p1_sum = sum([self.array[i] for i in p1_indices])
-        p2_sum = sum([self.array[i] for i in p2_indices])
+        p1_sum = sum([self.input_list[i] for i in p1_indices])
+        p2_sum = sum([self.input_list[i] for i in p2_indices])
         return abs(p1_sum - p2_sum)
 
     def get_array(self):
-        return self.array
+        return self.input_list
 
     def better_score(self, score1, score2):
         return score1 < score2
@@ -72,3 +72,21 @@ class PartitionNeighborStrategy(AbstractNeighborStrategy):
         element = source.pop(i)
         target.append(element)
         return source, target
+
+def solve_partition_exhaustive(input_list):
+    p = PartitionProblem(input_list)
+    solution = ExhaustivePartitionSolver(p).solve()
+    return solution
+
+def solve_partition_greedy(input_list):
+    p = PartitionProblem(input_list)
+    solution = GreedyPartitionSolver(p).solve()
+    return solution
+
+def solve_tsp_simulated_annealing(input_list, no_iterations, cooling_constant, initial_configuration = None):
+    p = PartitionProblem(input_list)
+    if not initial_configuration:
+        initial_configuration = [list(range(len(input_list))), []]
+    sol = SimulatedAnnealingSolver(p, PartitionNeighborStrategy()).solve(initial_configuration,
+                                                                         no_iterations, cooling_constant)
+    return sol
