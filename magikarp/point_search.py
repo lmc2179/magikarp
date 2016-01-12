@@ -26,11 +26,11 @@ class PointSearchSolver(AbstractSolver):
         return self.EVALUATION_COEFF * self.problem.evaluate_solution(p)
 
 class SimulatedAnnealingSolver(PointSearchSolver):
-    def solve(self, initial_point, no_iterations, cooling_constant):
+    def solve(self, initial_point, no_iterations, initial_temp):
         best_score = float('inf')
         best_point = None
         current_point = initial_point
-        temp = cooling_constant
+        temp = initial_temp
         for i in range(no_iterations): #TODO: Uncle bob this
             candidate_point = self.strategy.get_neighbor(current_point)
             acceptance_prob = self._get_acceptance_likelihood(current_point, candidate_point, temp)
@@ -40,11 +40,11 @@ class SimulatedAnnealingSolver(PointSearchSolver):
                 if current_score < best_score:
                     best_score = current_score
                     best_point = current_point
-            temp = self._get_temperature(i, cooling_constant, candidate_point, current_point)
+            temp = self._get_temperature(i, initial_temp, candidate_point, current_point, temp)
         return best_point
 
-    def _get_temperature(self, iteration, cooling_constant, candidate_point, current_point):
-        return cooling_constant / math.log(iteration+2)
+    def _get_temperature(self, iteration, initial_temp, candidate_point, current_point, current_temp):
+        return initial_temp / math.log(iteration + 2)
 
     def _get_acceptance_likelihood(self, current_point, candidate_point, temp):
         current_value = self._evaluate_point(current_point)
@@ -53,6 +53,27 @@ class SimulatedAnnealingSolver(PointSearchSolver):
             return 1.0
         else:
             return math.exp(-(candidate_value - current_value) / temp)
+
+class RobbinsMonroSimulatedAnnealingSolver(SimulatedAnnealingSolver):
+    def __init__(self, problem, neighbor_strategy, target_acceptance_rate):
+        self.target_acceptance_rate = target_acceptance_rate
+        self.acceptance_count = 0
+        self.total_count = 0
+        super(RobbinsMonroSimulatedAnnealingSolver, self).__init__(problem, neighbor_strategy)
+
+    def _get_temperature(self, iteration, initial_temp, candidate_point, current_point, current_temp):
+        self.total_count += 1
+        c = 20
+        if candidate_point == current_point:
+            new_temp = current_temp - c*self.target_acceptance_rate/(iteration+1)
+        else:
+            self.acceptance_count += 1
+            new_temp = current_temp + c*(1 - self.target_acceptance_rate)/(iteration+1)
+        print(self.get_acceptance_rate())
+        return new_temp
+
+    def get_acceptance_rate(self):
+        return 1.0 * self.acceptance_count / self.total_count
 
 class AbstractNeighborStrategy(object):
     def get_neighbors(self, current_point):

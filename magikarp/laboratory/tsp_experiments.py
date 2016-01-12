@@ -3,6 +3,7 @@ import json
 import os
 import random
 
+from matplotlib import pyplot as plt
 from tqdm import tqdm
 
 from magikarp.tsp import solve_tsp_simulated_annealing, solve_tsp_hill_climbing
@@ -43,10 +44,10 @@ def write_cc_results(cooling_constants, costs, baseline_cost, filename):
     f.close()
 
 LOWER, UPPER = 0.0, 2.0
-NO_CITIES = 25
-SA_ITERATIONS = 30000
-NO_TRIALS = 200
-NO_SOLUTIONS = 200
+NO_CITIES = 30
+SA_ITERATIONS = 50000
+NO_TRIALS = 50
+NO_SOLUTIONS_PER_TRIAL = 200
 timestamp = datetime.datetime.now().strftime('%a-%H-%M')
 filename_stem = 'cooling_constant_test_{0}.json'.format(timestamp)
 filename = os.path.join(DATA_ROOT, filename_stem)
@@ -56,12 +57,15 @@ f.close()
 
 for city in range(NO_TRIALS):
     print(city+1, '/', NO_TRIALS)
-    cooling_constants, costs, baseline_cost = generate_cc_data(NO_SOLUTIONS, NO_CITIES, LOWER, UPPER, SA_ITERATIONS)
+    cooling_constants, costs, baseline_cost = generate_cc_data(NO_SOLUTIONS_PER_TRIAL, NO_CITIES, LOWER, UPPER, SA_ITERATIONS)
     write_cc_results(cooling_constants, costs, baseline_cost, filename)
 
-    # plt.plot([LOWER, UPPER], [baseline_cost, baseline_cost], color='r')
-    # plt.plot(cooling_constants, costs, marker='o', linewidth=0.0)
-    # plt.show()
+    plt.plot([LOWER, UPPER], [baseline_cost, baseline_cost], color='r')
+    plt.plot(cooling_constants, costs, marker='o', linewidth=0.0)
+    png_filename_stem = '{0}-{1}.png'.format(timestamp, city)
+    png_filename = os.path.join(DATA_ROOT, png_filename_stem)
+    plt.savefig(png_filename)
+    plt.clf()
 
 f = open(filename, 'a')
 param_data = {'lower_bound': LOWER, 'upper_bound': UPPER, 'sa_iterations': SA_ITERATIONS, 'no_cities':NO_CITIES}
