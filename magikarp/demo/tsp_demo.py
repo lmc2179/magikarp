@@ -10,7 +10,7 @@ def draw_tour(tour, city_x, city_y, color, fig_no):
     tour_x, tour_y = [city_x[i] for i in tour], [city_y[i] for i in tour]
     plt.plot(tour_x, tour_y, color=color)
 
-NUM_CITIES = 50
+NUM_CITIES = 100
 city_x = [random.random() for _ in range(NUM_CITIES)]
 city_y = [random.random() for _ in range(NUM_CITIES)]
 city_tuples = list(zip(city_x, city_y))
@@ -18,7 +18,7 @@ city_tuples = list(zip(city_x, city_y))
 p = tsp.TravellingSalespersonProblem(city_tuples)
 
 solver = point_search.SimulatedAnnealingSolver(p, tsp.TSP2OptNeighborStrategy())
-sa_tour = solver.solve(list(range(0, NUM_CITIES)), 30000, 1.0)
+sa_tour = solver.solve(list(range(0, NUM_CITIES)), 30000, 150.0, 0.999)
 plt.plot(solver.score_trace)
 plt.show()
 print("SA Tour: ", p.evaluate_solution(sa_tour))

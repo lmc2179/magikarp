@@ -31,7 +31,7 @@ class SimulatedAnnealingSolver(PointSearchSolver):
         self.temperature_trace = []
         self.score_trace = []
 
-    def solve(self, initial_point, no_iterations, initial_temp):
+    def solve(self, initial_point, no_iterations, initial_temp, cooling_rate):
         best_score = float('inf')
         best_point = None
         current_point = initial_point
@@ -47,11 +47,11 @@ class SimulatedAnnealingSolver(PointSearchSolver):
                     best_point = current_point
             self.temperature_trace.append(temp)
             self.score_trace.append(best_score)
-            temp = self._get_temperature(i, initial_temp, candidate_point, current_point, temp)
+            temp = self._get_temperature(i, initial_temp, candidate_point, current_point, temp, cooling_rate)
         return best_point
 
-    def _get_temperature(self, iteration, initial_temp, candidate_point, current_point, current_temp):
-        return initial_temp / math.log(iteration + 2)
+    def _get_temperature(self, iteration, initial_temp, candidate_point, current_point, current_temp, cooling_rate):
+        return initial_temp * cooling_rate**iteration
 
     def _get_acceptance_likelihood(self, current_point, candidate_point, temp):
         current_value = self._evaluate_point(current_point)

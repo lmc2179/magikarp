@@ -21,7 +21,7 @@ class ExhaustiveSolverTest(unittest.TestCase):
 
 class SimulatedAnnealingSolverTest(unittest.TestCase):
     def test_optimal_solution(self):
-        sol = partition.solve_tsp_simulated_annealing([1, -1, 2], 100, 5.0)
+        sol = partition.solve_tsp_simulated_annealing([1, -1, 2], 100, 2.0, 0.999)
         p1, p2 = sol
         self.assertNotEqual(p1, p2)
         best_partitioning = [{0}, {1, 2}]

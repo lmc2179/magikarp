@@ -83,10 +83,10 @@ def solve_partition_greedy(input_list):
     solution = GreedyPartitionSolver(p).solve()
     return solution
 
-def solve_tsp_simulated_annealing(input_list, no_iterations, cooling_constant, initial_configuration = None):
+def solve_tsp_simulated_annealing(input_list, no_iterations, initial_temp, cooling_rate, initial_configuration = None):
     p = PartitionProblem(input_list)
     if not initial_configuration:
         initial_configuration = [list(range(len(input_list))), []]
     sol = SimulatedAnnealingSolver(p, PartitionNeighborStrategy()).solve(initial_configuration,
-                                                                         no_iterations, cooling_constant)
+                                                                         no_iterations, initial_temp, cooling_rate)
     return sol

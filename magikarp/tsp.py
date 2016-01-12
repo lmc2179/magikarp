@@ -82,12 +82,12 @@ def solve_tsp_exhaustive(points):
     solution = ExhaustiveTSPSolver(p).solve()
     return solution, p.evaluate_solution(solution)
 
-def solve_tsp_simulated_annealing(points, no_iterations, cooling_constant, initial_configuration = None):
+def solve_tsp_simulated_annealing(points, no_iterations, initial_temp, cooling_rate, initial_configuration = None):
     p = TravellingSalespersonProblem(points)
     if not initial_configuration:
         initial_configuration = _get_random_initial_configuration(p)
     ns = _get_neighbor_strategy('2-opt') # This is hard-coded for now, until we have more neighborhood types
-    solution = SimulatedAnnealingSolver(p, ns).solve(initial_configuration, no_iterations, cooling_constant)
+    solution = SimulatedAnnealingSolver(p, ns).solve(initial_configuration, no_iterations, initial_temp, cooling_rate)
     return solution, p.evaluate_solution(solution)
 
 def solve_tsp_hill_climbing(points, no_iterations, initial_configuration = None):
