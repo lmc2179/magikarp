@@ -17,8 +17,10 @@ city_tuples = list(zip(city_x, city_y))
 
 p = tsp.TravellingSalespersonProblem(city_tuples)
 
-solver = point_search.RobbinsMonroSimulatedAnnealingSolver(p, tsp.TSP2OptNeighborStrategy(), 0.01)
+solver = point_search.SimulatedAnnealingSolver(p, tsp.TSP2OptNeighborStrategy())
 sa_tour = solver.solve(list(range(0, NUM_CITIES)), 30000, 1.0)
+plt.plot(solver.score_trace)
+plt.show()
 print("SA Tour: ", p.evaluate_solution(sa_tour))
 draw_tour(sa_tour + [0], city_x, city_y, 'r', 0)
 
